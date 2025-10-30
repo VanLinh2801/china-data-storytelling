@@ -141,7 +141,7 @@ st.subheader("Chapters")
 col1, col2, col3, col4 = st.columns(4)
 if col1.button("🏭 Economy\nFrom fields to factories", use_container_width=True):
     st.switch_page("pages/1_Economy.py")
-if col2.button("🌆 Urbanization\nThe rise of mega cities", use_container_width=True):
+if col2.button("🌆 Population\n1 billion people", use_container_width=True):
     st.switch_page("pages/2_Population.py")
 if col3.button("🌱 Environment\nThe cost of growth", use_container_width=True):
     st.switch_page("pages/3_Environment_and_Energy.py")
