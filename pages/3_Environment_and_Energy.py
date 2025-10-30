@@ -10,17 +10,11 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
-
-# ---------------------------
-# Config & Constants
-# ---------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_DATASET = PROJECT_ROOT / "China.cleaned.csv"
 FALLBACK_DATASET = PROJECT_ROOT / "China.csv"
 
-# Comprehensive indicators for environmental storytelling
 INDICATORS = {
-    # 1. Greenhouse Gas Emissions
     "CO2_TOTAL": "EN.GHG.CO2.MT.CE.AR5",
     "CH4_TOTAL": "EN.GHG.CH4.MT.CE.AR5", 
     "N2O_TOTAL": "EN.GHG.N2O.MT.CE.AR5",
@@ -29,7 +23,6 @@ INDICATORS = {
     "GHG_TOTAL": "EN.GHG.ALL.MT.CE.AR5",
     "GHG_PER_CAPITA": "EN.GHG.ALL.PC.CE.AR5",
     
-    # 2. Energy Structure
     "ELEC_COAL": "EG.ELC.COAL.ZS",
     "ELEC_GAS": "EG.ELC.NGAS.ZS", 
     "ELEC_NUCLEAR": "EG.ELC.NUCL.ZS",
@@ -38,13 +31,11 @@ INDICATORS = {
     "FOSSIL_CONSUMPTION": "EG.USE.COMM.FO.ZS",
     "RENEW_FINAL": "EG.FEC.RNEW.ZS",
     
-    # 3. Land and Forest Resources
     "FOREST_PCT": "AG.LND.FRST.ZS",
     "FOREST_DEPLETION": "NY.ADJ.DFOR.GN.ZS",
     "AGRI_LAND": "AG.LND.AGRI.ZS",
     "ARABLE_LAND": "AG.LND.ARBL.ZS",
     
-    # 4. Pollution and Water Resources
     "PM25": "EN.ATM.PM25.MC.M3",
     "WATER_TOTAL": "ER.H2O.FWTL.K3",
     "WATER_AGRI": "ER.H2O.FWAG.ZS",
@@ -52,14 +43,12 @@ INDICATORS = {
     "WATER_DOMESTIC": "ER.H2O.FWDM.ZS",
     "WATER_STRESS": "ER.H2O.FWST.ZS",
     
-    # 5. Green Economy and Environmental Costs
     "CO2_DAMAGE": "NY.ADJ.DCO2.GN.ZS",
     "PM_DAMAGE": "NY.ADJ.DPEM.GN.ZS",
     "ENERGY_DAMAGE": "NY.ADJ.DNGY.GN.ZS",
     "NATURAL_RESOURCES": "NY.GDP.TOTL.RT.ZS",
     "GREEN_SAVINGS": "NY.ADJ.NNAT.GN.ZS",
     
-    # Economic indicators for correlation
     "GDP_PER_CAPITA": "NY.GDP.PCAP.CD",
     "GDP_GROWTH": "NY.GDP.MKTP.KD.ZG",
 }
@@ -159,6 +148,23 @@ st.markdown(
 # Sidebar
 st.sidebar.header("⚙️ Filters")
 decade = st.sidebar.selectbox("🗓️ Time Period", ["All", "2000s", "2010s"], index=0, key="env_decade")
+
+# Glossary (page-specific)
+with st.sidebar.expander("Glossary List", expanded=False):
+    st.markdown(
+        """
+        - **GHG (Greenhouse Gases)**: CO₂, CH₄, N₂O driving climate change.
+        - **tCO₂e**: Tonne of carbon dioxide equivalent.
+        - **CO₂ per capita**: CO₂ emissions per person.
+        - **Electricity mix (%)**: Shares of Coal, Gas, Nuclear, Hydro, Renewables.
+        - **Renewables**: Non-fossil energy (e.g., wind, solar, hydro, biomass).
+        - **PM2.5 (μg/m³)**: Fine particulates harmful to health.
+        - **Forest cover (% land)**: Forest area as a share of land area.
+        - **Water stress**: Freshwater withdrawal as % of available resources.
+        - **Environmental damage (% GNI)**: CO₂, PM, energy depletion costs.
+        - **Green savings (% GNI)**: Adjusted net national savings (environmentally adjusted).
+        """
+    )
 
 # Header
 st.title("Environment & Energy Transformation (2000–2020)")

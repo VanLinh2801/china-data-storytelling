@@ -119,6 +119,17 @@ st.markdown(
 st.sidebar.header("⚙️ Filters")
 period = st.sidebar.selectbox("🗓️ Time period", ["All", "2000–2010", "2011–2020"], index=0, key="urban_period")
 
+# Glossary (page-specific)
+with st.sidebar.expander("Glossary List", expanded=False):
+    st.markdown(
+        """
+        - **Birth rate**: Number of live births per 1,000 people per year.
+        - **Death rate**: Number of deaths per 1,000 people per year.
+        - **Sex ratio**: Ratio of males to females in the population (Male/Female).
+        - **Sex ratio at birth**: Ratio of male to female births (normal ≈ 1.05).
+        """
+    )
+
 # Header
 st.title("Population (2000–2020)")
 st.markdown(

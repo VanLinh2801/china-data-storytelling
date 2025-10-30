@@ -148,6 +148,15 @@ st.markdown(
 st.sidebar.header("⚙️ Filters")
 decade = st.sidebar.selectbox("🗓️ Decade", options=["All", "2000s", "2010s"], index=0, key="innovation_decade")
 
+# Glossary (page-specific)
+with st.sidebar.expander("Glossary List", expanded=False):
+    st.markdown(
+        """
+        - **R&D**: Research and development expenditure as a share of GDP.
+        - **Tertiary enrollment**: Gross enrollment ratio in higher education.
+        """
+    )
+
 # Header
 st.title("Innovation & Society Transformation (2000–2020)")
 st.markdown(

@@ -123,6 +123,21 @@ st.markdown(
 st.sidebar.header("⚙️ Filters")
 decade_choice = st.sidebar.selectbox("🗓️ Decade", options=["All", "2000s", "2010s"], index=0, key="economy_decade")
 
+with st.sidebar.expander("Glossary List", expanded=False):
+    st.markdown(
+        """
+        - **GDP**: Total value of goods and services produced.
+        - **GDP per capita**: Real GDP divided by population.
+        - **CPI**: Consumer price index annual inflation.
+        - **GDP deflator**: Broad price change for all domestically produced output.
+        - **GNI**: Gross National Income (GDP + net income from abroad).
+        - **FDI**: Foreign direct investment into the economy.
+        - **Reserves (USD)**: Official foreign exchange reserves.
+        - **External debt**: External liabilities relative to national income.
+        - **Current account**: Net trade in goods/services, income, transfers.
+        """
+    )
+
 st.title("China’s Economic Transformation (2000–2020)")
 st.markdown(
     """
