@@ -139,13 +139,13 @@ except Exception:
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
 st.subheader("Chapters")
 col1, col2, col3, col4 = st.columns(4)
-if col1.button("🏭 Economy\nFrom fields to factories", use_container_width=True):
+if col1.button("🏭 Economy - From fields to factories", use_container_width=True):
     st.switch_page("pages/1_Economy.py")
-if col2.button("🌆 Population\nThe rise of mega cities", use_container_width=True):
+if col2.button("🌆 Population - The rise of mega cities", use_container_width=True):
     st.switch_page("pages/2_Population.py")
-if col3.button("🌱 Environment\nThe cost of growth", use_container_width=True):
+if col3.button("🌱 Environment - The cost of growth", use_container_width=True):
     st.switch_page("pages/3_Environment_and_Energy.py")
-if col4.button("💡 Innovation & Society\nFrom manufacturing to mind", use_container_width=True):
+if col4.button("💡 Innovation & Society - From manufacturing to mind", use_container_width=True):
     st.switch_page("pages/4_Innovation_and_Society.py")
 
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
