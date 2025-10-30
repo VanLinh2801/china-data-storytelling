@@ -451,7 +451,7 @@ with row_b2:
 
 st.subheader("China Global Trade Network")
 try:
-    trade_regions_path = PROJECT_ROOT / "china_trade_regions.csv"
+    trade_regions_path = PROJECT_ROOT / "data/china_trade_regions.csv"
     if trade_regions_path.exists():
         tri = pd.read_csv(trade_regions_path)
         expected_cols = {"Year", "Region", "Exports_USD", "Imports_USD"}
