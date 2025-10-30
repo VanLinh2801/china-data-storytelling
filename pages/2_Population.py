@@ -101,7 +101,7 @@ def decade_filter(df: pd.DataFrame, period: str | None) -> pd.DataFrame:
 # ---------------------------
 # Streamlit UI
 # ---------------------------
-st.set_page_config(page_title="Urbanization & Population (2000–2020)", layout="wide", page_icon="🏙️")
+st.set_page_config(page_title="Population (2000–2020)", layout="wide", page_icon="🏙️")
 
 st.markdown(
     """
@@ -116,15 +116,14 @@ st.markdown(
 )
 
 # Sidebar sticky filter
-st.sidebar.header("Filters")
-period = st.sidebar.selectbox("Time period", ["All", "2000–2010", "2011–2020"], index=0, key="urban_period")
+st.sidebar.header("⚙️ Filters")
+period = st.sidebar.selectbox("🗓️ Time period", ["All", "2000–2010", "2011–2020"], index=0, key="urban_period")
 
 # Header
-st.title("Urbanization & Population Transformation (2000–2020)")
+st.title("Population (2000–2020)")
 st.markdown(
     """
-    Migration from rural to urban areas reshaped China’s demographics. Explore population, urbanization, infrastructure,
-    employment, gender ratio, and age structure.
+    Migration reshaped China’s demographics. Explore population levels and growth, gender ratios, age structure, employment, and urban–rural composition.
     """
 )
 

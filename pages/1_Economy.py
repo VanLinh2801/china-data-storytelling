@@ -120,8 +120,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.sidebar.header("Filters")
-decade_choice = st.sidebar.selectbox("Decade", options=["All", "2000s", "2010s"], index=0, key="economy_decade")
+st.sidebar.header("⚙️ Filters")
+decade_choice = st.sidebar.selectbox("🗓️ Decade", options=["All", "2000s", "2010s"], index=0, key="economy_decade")
 
 st.title("China’s Economic Transformation (2000–2020)")
 st.markdown(
@@ -561,5 +561,5 @@ with col_left:
     if st.button("← Back: Home", use_container_width=True):
         st.switch_page("Home.py")
 with col_right:
-    if st.button("Next: Urbanization & Population →", use_container_width=True):
-        st.switch_page("pages/2_Urbanization_and_Population.py")
+    if st.button("Next: Population →", use_container_width=True):
+        st.switch_page("pages/2_Population.py")

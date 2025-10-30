@@ -157,7 +157,8 @@ st.markdown(
 )
 
 # Sidebar
-decade = st.sidebar.selectbox("Time Period", ["All", "2000s", "2010s"], index=0, key="env_decade")
+st.sidebar.header("⚙️ Filters")
+decade = st.sidebar.selectbox("🗓️ Time Period", ["All", "2000s", "2010s"], index=0, key="env_decade")
 
 # Header
 st.title("Environment & Energy Transformation (2000–2020)")
@@ -613,8 +614,8 @@ st.markdown(
 st.markdown("---")
 col_left, col_right = st.columns(2)
 with col_left:
-    if st.button("← Back: Urbanization & Population", use_container_width=True):
-        st.switch_page("pages/2_Urbanization_and_Population.py")
+    if st.button("← Back: Population", use_container_width=True):
+        st.switch_page("pages/2_Population.py")
 with col_right:
     if st.button("Next: Innovation & Society →", use_container_width=True):
         st.switch_page("pages/4_Innovation_and_Society.py")

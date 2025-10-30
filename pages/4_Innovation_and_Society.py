@@ -145,8 +145,8 @@ st.markdown(
 )
 
 # Sidebar sticky filter
-st.sidebar.header("Filters")
-decade = st.sidebar.selectbox("Decade", options=["All", "2000s", "2010s"], index=0, key="innovation_decade")
+st.sidebar.header("⚙️ Filters")
+decade = st.sidebar.selectbox("🗓️ Decade", options=["All", "2000s", "2010s"], index=0, key="innovation_decade")
 
 # Header
 st.title("Innovation & Society Transformation (2000–2020)")
