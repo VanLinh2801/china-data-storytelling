@@ -14,8 +14,8 @@ import streamlit as st
 # Config & Constants
 # ---------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_DATASET = PROJECT_ROOT / "China.cleaned.csv"
-FALLBACK_DATASET = PROJECT_ROOT / "China.csv"
+DEFAULT_DATASET = PROJECT_ROOT / "data" / "China.cleaned.csv"
+FALLBACK_DATASET = PROJECT_ROOT / "data" / "China.csv"
 
 INDICATORS = {
     "POP_TOTAL": "SP.POP.TOTL",

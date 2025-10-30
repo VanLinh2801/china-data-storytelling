@@ -7,8 +7,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_DATASET = ROOT / "China.cleaned.csv"
-FALLBACK_DATASET = ROOT / "China.csv"
+DEFAULT_DATASET = ROOT / "data/China.cleaned.csv"
+FALLBACK_DATASET = ROOT / "data/China.csv"
 
 st.set_page_config(page_title="China 2000–2020: Overview", layout="wide", page_icon="🧭")
 

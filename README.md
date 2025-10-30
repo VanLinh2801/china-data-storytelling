@@ -57,7 +57,13 @@ Project structure (key files)
    - 2_Population.py
    - 3_Environment_and_Energy.py
    - 4_Innovation_and_Society.py
- - China.cleaned.csv, China.csv
+ - data/
+   - China.cleaned.csv
+   - China.csv
+   - china_trade_regions.csv (optional)
+ - scripts/
+   - clean_china_dataset.py
+   - crawl_data.py
  - requirements.txt
 
 Configuration & notes

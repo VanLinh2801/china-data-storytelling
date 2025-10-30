@@ -11,8 +11,8 @@ from plotly.subplots import make_subplots
 import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_DATASET = PROJECT_ROOT / "China.cleaned.csv"
-FALLBACK_DATASET = PROJECT_ROOT / "China.csv"
+DEFAULT_DATASET = PROJECT_ROOT / "data" / "China.cleaned.csv"
+FALLBACK_DATASET = PROJECT_ROOT / "data" / "China.csv"
 
 INDICATORS = {
     "CO2_TOTAL": "EN.GHG.CO2.MT.CE.AR5",
