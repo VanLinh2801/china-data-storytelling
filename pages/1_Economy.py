@@ -371,6 +371,182 @@ with trade_col:
     else:
         st.info("Trade series not available.")
 
+st.subheader("Finance & External Position")
+row_a1, row_a2 = st.columns((2, 2))
+with row_a1:
+    fdi_g = fdi_in.rename(columns={"FDI_in_%GDP": "FDI inflows (% of GDP)"}).merge(
+        gdp_growth.rename(columns={"GDP_growth_pct": "GDP growth (%)"}), on="Year", how="inner"
+    )
+    if not fdi_g.empty:
+        fdi_g = decade_filter(fdi_g, decade_choice)
+        fig_fdi = go.Figure()
+        fig_fdi.add_trace(go.Scatter(x=fdi_g["Year"], y=fdi_g["FDI inflows (% of GDP)"], name="FDI inflows (% of GDP)", mode="lines+markers", line=dict(color="#d4a017"), yaxis="y1"))
+        fig_fdi.add_trace(go.Scatter(x=fdi_g["Year"], y=fdi_g["GDP growth (%)"], name="GDP growth (%)", mode="lines+markers", line=dict(color="#6c757d"), yaxis="y2"))
+        fig_fdi.update_layout(title=dict(text="FDI Inflows (% of GDP) vs GDP Growth (%)", y=0.95), xaxis_title="Year", yaxis=dict(title="FDI (% of GDP)", side="left"), yaxis2=dict(title="Growth (%)", overlaying="y", side="right"), height=420, margin=dict(t=80, b=50, l=50, r=30), legend=dict(orientation="h", yanchor="top", y=1.12, xanchor="left", x=0.0))
+        st.plotly_chart(fig_fdi, use_container_width=True)
+    else:
+        st.info("FDI/Growth series not available.")
+with row_a2:
+    dr = debt.rename(columns={"External_debt_%GNI": "External debt (% of GNI)"}).merge(
+        reserves.rename(columns={"Reserves_USD": "Reserves (USD)"}), on="Year", how="inner"
+    )
+    if not dr.empty:
+        dr = decade_filter(dr, decade_choice)
+        fig_dr = go.Figure()
+        fig_dr.add_trace(go.Scatter(x=dr["Year"], y=dr["External debt (% of GNI)"], name="External debt (% of GNI)", mode="lines+markers", line=dict(color="#6c757d"), yaxis="y1"))
+        fig_dr.add_trace(go.Scatter(x=dr["Year"], y=dr["Reserves (USD)"] / 1e9, name="Reserves (USD bn)", mode="lines+markers", line=dict(color="#d33f49"), yaxis="y2"))
+        fig_dr.update_layout(title=dict(text="External Debt (% of GNI) vs Foreign Reserves (USD bn)", y=0.95), xaxis_title="Year", yaxis=dict(title="Debt (% of GNI)", side="left"), yaxis2=dict(title="Reserves (USD bn)", overlaying="y", side="right"), height=420, margin=dict(t=80, b=50, l=50, r=30), legend=dict(orientation="h", yanchor="top", y=1.12, xanchor="left", x=0.0))
+        st.plotly_chart(fig_dr, use_container_width=True)
+    else:
+        st.info("Debt/Reserves series not available.")
+row_b1, row_b2 = st.columns((2, 2))
+with row_b1:
+    if not cab.empty:
+        ca = decade_filter(cab.rename(columns={"Current_account_%GDP": "Current account (% of GDP)"}), decade_choice)
+        fig_ca = px.box(ca.assign(Decade=np.where(ca["Year"] <= 2009, "2000s", "2010s")), x="Decade", y="Current account (% of GDP)", color="Decade", color_discrete_map={"2000s": "#4e79a7", "2010s": "#d33f49"}, points="all")
+        fig_ca.update_layout(title=dict(text="Current Account (% of GDP) by Decade", y=0.95), yaxis_title="Current Account (% of GDP)", height=420, margin=dict(t=80, b=50, l=50, r=30), showlegend=False)
+        st.plotly_chart(fig_ca, use_container_width=True)
+    else:
+        st.info("Current account series not available.")
+with row_b2:
+    vars_df: List[pd.DataFrame] = []
+    for df, col in [
+        (fdi_in.rename(columns={"FDI_in_%GDP": "FDI inflows (% of GDP)"}), "FDI inflows (% of GDP)"),
+        (exports.rename(columns={"Exports_%GDP": "Exports (% of GDP)"}), "Exports (% of GDP)"),
+        (imports.rename(columns={"Imports_%GDP": "Imports (% of GDP)"}), "Imports (% of GDP)"),
+        (gdp_growth.rename(columns={"GDP_growth_pct": "GDP growth (%)"}), "GDP growth (%)"),
+        (debt.rename(columns={"External_debt_%GNI": "External debt (% of GNI)"}), "External debt (% of GNI)"),
+    ]:
+        if not df.empty:
+            vars_df.append(df[["Year", col]])
+    if vars_df:
+        merged = vars_df[0]
+        for x in vars_df[1:]:
+            merged = merged.merge(x, on="Year", how="inner")
+        merged = decade_filter(merged, decade_choice)
+        if merged.shape[1] > 2:
+            corr = merged.drop(columns=["Year"]).corr().round(2)
+            fig_corr = px.imshow(corr, text_auto=True, color_continuous_scale="RdBu", zmin=-1, zmax=1)
+            fig_corr.update_layout(title=dict(text="Correlation: FDI, Exports, Imports, GDP Growth, External Debt", y=0.95), height=420, margin=dict(t=80, b=50, l=50, r=30))
+            st.plotly_chart(fig_corr, use_container_width=True)
+        else:
+            st.info("Not enough variables for correlation.")
+    else:
+        st.info("Insufficient data to compute correlations.")
+
+st.subheader("China Global Trade Network")
+try:
+    trade_regions_path = PROJECT_ROOT / "china_trade_regions.csv"
+    if trade_regions_path.exists():
+        tri = pd.read_csv(trade_regions_path)
+        expected_cols = {"Year", "Region", "Exports_USD", "Imports_USD"}
+        if expected_cols.issubset(set(tri.columns)):
+            tri = tri.dropna(subset=["Year", "Region"]).copy()
+            tri["Year"] = tri["Year"].astype(int)
+            trade_type = st.selectbox("Select Trade Mode", ["Exports", "Imports"], key="network_trade_type")
+            if trade_type == "Exports":
+                value_col = "Exports_USD"
+                title_suffix = "Exports"
+            else:
+                value_col = "Imports_USD"
+                title_suffix = "Imports"
+            region_colors = {
+                "East Asia & Pacific": "#e07a5f",
+                "Europe & Central Asia": "#4e79a7",
+                "North America": "#d4a017",
+                "Latin America & Caribbean": "#2ca02c",
+                "Middle East & North Africa": "#ff7f0e",
+                "South Asia": "#9467bd",
+                "Other Asia": "#8c564b",
+                "Sub-Saharan Africa": "#e377c2",
+            }
+            for y_sel in [2000, 2020]:
+                tri_y = tri[tri["Year"] == y_sel]
+                if tri_y.empty:
+                    st.info(f"No data for {y_sel}.")
+                else:
+                    tri_sorted = tri_y.sort_values(by=value_col, ascending=False).reset_index(drop=True)
+                    regions = tri_sorted["Region"].tolist()
+                    china_pos = (0.0, 0.0)
+                    q1 = np.quantile(values := tri_sorted[value_col].values, 0.33) if len(tri_sorted) else 0
+                    q2 = np.quantile(values, 0.66) if len(tri_sorted) else 0
+                    inner_r, mid_r, outer_r = 2.0, 3.2, 4.0
+                    inner, mid, outer = [], [], []
+                    for rname, v in zip(regions, tri_sorted[value_col].values):
+                        if v <= q1:
+                            inner.append(rname)
+                        elif v <= q2:
+                            mid.append(rname)
+                        else:
+                            outer.append(rname)
+                    region_positions = {}
+                    for i, region in enumerate(inner):
+                        angle = 2 * np.pi * i / max(len(inner), 1) + (0.08 * ((i % 2) - 0.5))
+                        x = inner_r * np.cos(angle)
+                        y = inner_r * np.sin(angle)
+                        region_positions[region] = (x, y)
+                    for j, region in enumerate(mid):
+                        angle = 2 * np.pi * (j + 0.33) / max(len(mid), 1) + (0.09 * ((j % 2) - 0.5))
+                        x = mid_r * np.cos(angle)
+                        y = mid_r * np.sin(angle)
+                        region_positions[region] = (x, y)
+                    for k, region in enumerate(outer):
+                        angle = 2 * np.pi * (k + 0.66) / max(len(outer), 1) + (0.1 * ((k % 2) - 0.5))
+                        x = outer_r * np.cos(angle)
+                        y = outer_r * np.sin(angle)
+                        region_positions[region] = (x, y)
+                    values = tri_sorted[value_col].values
+                    max_value = values.max() if len(values) > 0 else 1
+                    min_size, max_size = 24, 70
+                    def calculate_size(v):
+                        if max_value <= 0:
+                            return min_size
+                        return min_size + (max_size - min_size) * np.sqrt(float(v) / max_value)
+                    fig_network = go.Figure()
+                    for region in regions:
+                        x0, y0 = china_pos
+                        x1, y1 = region_positions[region]
+                        fig_network.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1], mode="lines", line=dict(color="rgba(120,120,120,0.25)", width=1), hoverinfo="skip", showlegend=False))
+                    for _, row in tri_sorted.iterrows():
+                        region = row["Region"]
+                        v = row[value_col]
+                        x, y = region_positions[region]
+                        size = float(calculate_size(v))
+                        vb = v / 1e9
+                        color = region_colors.get(region, "#6c757d")
+                        fig_network.add_trace(go.Scatter(x=[x], y=[y], mode="markers", marker=dict(size=size + 8, color="rgba(0,0,0,0.08)", line=dict(width=0)), hoverinfo="skip", showlegend=False))
+                        display_text = (f"${vb/1000:.1f}T" if vb >= 1000 else f"${vb:.1f}B")
+                        font_size = int(max(7, min(12, size * 0.15)))
+                        fig_network.add_trace(go.Scatter(x=[x], y=[y], mode="markers+text", marker=dict(size=size, color=color, line=dict(width=4, color="white"), opacity=0.96), text=[display_text], textposition="middle center", textfont=dict(color="white", size=font_size, family="Inter, Arial"), hovertemplate=f"<b>{region}</b><br>{title_suffix}: ${vb:.1f}B USD<extra></extra>", showlegend=False))
+                    for rname in regions:
+                        fig_network.add_trace(
+                            go.Scatter(x=[None], y=[None], mode="markers", marker=dict(size=12, color=region_colors.get(rname, "#6c757d")), name=rname, showlegend=True)
+                        )
+                    total_b = tri_sorted[value_col].sum() / 1e9
+                    fig_network.add_trace(go.Scatter(x=[china_pos[0]], y=[china_pos[1]], mode="markers+text", marker=dict(size=56, color="#d33f49", line=dict(width=6, color="white"), opacity=0.98), text=[(f"${total_b/1000:.1f}T" if total_b >= 1000 else f"${total_b:.1f}B")], textposition="middle center", textfont=dict(color="white", size=10, family="Inter, Arial Black"), hovertemplate=f"<b>China</b><br>Total {title_suffix.lower()}: ${total_b:.1f}B USD<extra></extra>", showlegend=False))
+                    fig_network.add_annotation(x=china_pos[0], y=china_pos[1]-0.6, text="China", showarrow=False, font=dict(size=12, color="#2f2f2f"), xanchor="center", yanchor="top")
+                    fig_network.update_layout(
+                        title=dict(text=f"{title_suffix} — {y_sel}", y=0.94),
+                        xaxis=dict(visible=False, range=[-4.4, 4.4]),
+                        yaxis=dict(visible=False, range=[-4.4, 4.4]),
+                        height=740,
+                        margin=dict(t=60, b=30, l=10, r=220),
+                        plot_bgcolor="white", paper_bgcolor="white",
+                        showlegend=True,
+                        legend=dict(orientation="v", yanchor="top", y=1, xanchor="left", x=1.02, font=dict(size=11)),
+                        shapes=[
+                            dict(type="circle", xref="x", yref="y", x0=-1.15, y0=-1.15, x1=1.15, y1=1.15, line=dict(color="rgba(0,0,0,0.06)", width=1), layer="below"),
+                            dict(type="circle", xref="x", yref="y", x0=-1.85, y0=-1.85, x1=1.85, y1=1.85, line=dict(color="rgba(0,0,0,0.04)", width=1), layer="below"),
+                        ]
+                    )
+                    st.plotly_chart(fig_network, use_container_width=True)
+        else:
+            st.info("'china_trade_regions.csv' missing required columns: Year, Region, Exports_USD, Imports_USD.")
+    else:
+        st.info("Provide 'china_trade_regions.csv' with columns: Year, Region, Exports_USD, Imports_USD to render the network.")
+except Exception as e:
+    st.info(f"Unable to render trade network: {str(e)}")
+
 st.markdown("---")
 st.subheader("Conclusion")
 st.markdown(
