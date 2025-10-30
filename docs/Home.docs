@@ -1,0 +1,23 @@
+Home (Overview)
+
+Purpose
+- Provide a concise introduction to China’s 2000–2020 transformation with a hero section, milestone timeline, headline indicators, and navigation to chapters.
+
+Narrative
+- The landing page frames the two-decade journey: rapid industrial expansion, urbanization, environmental pressure, and subsequent pivot to greener, innovation-driven growth.
+
+Components
+1) Hero Section
+   - Title and subtitle establish scope and tone.
+2) Timeline of Change
+   - Key phases: WTO accession (2001), urban expansion (2000s), air-quality control policies (2013–2018), digital & innovation scale-up (2010s).
+3) Indicator Cards (2000 → 2020)
+   - GDP (USD Trillions), Urban Population (%), Renewable Electricity (%), Internet Users (%).
+   - Why it matters: the set captures economy, people, planet, and digitalization.
+4) Mini Dual-Axis Chart
+   - GDP (area) vs Urbanization (%) (line): encodes scale and structural shift together.
+5) Chapter Navigation
+   - Economy → Urbanization → Environment → Innovation.
+
+Design Notes
+- Minimalistic palette; consistent margins; responsive layout; readable fonts.

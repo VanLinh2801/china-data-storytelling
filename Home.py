@@ -12,7 +12,6 @@ FALLBACK_DATASET = ROOT / "China.csv"
 
 st.set_page_config(page_title="China 2000–2020: Overview", layout="wide", page_icon="🧭")
 
-# Styles (Google Fonts + custom CSS)
 st.markdown(
     """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -57,7 +56,6 @@ def indicator_value(df: pd.DataFrame, code: str, year: int) -> float | None:
 
 df = read_dataset()
 
-# Hero
 st.markdown(
     """
     <div class="hero">
@@ -69,8 +67,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-# Timeline
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
 st.subheader("Timeline of Change")
 st.markdown(
@@ -85,8 +81,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-# Summary indicator cards
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
 st.subheader("At a Glance (2000 → 2020)")
 
@@ -99,7 +93,6 @@ ren2020 = indicator_value(df, "EG.ELC.RNEW.ZS", 2020)
 net2000 = indicator_value(df, "IT.NET.USER.ZS", 2000)
 net2020 = indicator_value(df, "IT.NET.USER.ZS", 2020)
 
-# Fallbacks if data missing
 def _fallback(val, alt):
     return alt if val is None else val
 
@@ -125,8 +118,6 @@ with col_ic:
     st.plotly_chart(figD, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-
-# Optional mini area chart: GDP & Urbanization
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
 st.subheader("The Big Picture")
 try:
@@ -145,22 +136,18 @@ try:
 except Exception:
     pass
 
-
-# Navigation cards
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
 st.subheader("Chapters")
 col1, col2, col3, col4 = st.columns(4)
 if col1.button("🏭 Economy\nFrom fields to factories", use_container_width=True):
-    st.switch_page("pages/1_📈_Economy.py")
+    st.switch_page("pages/1_Economy.py")
 if col2.button("🌆 Urbanization\nThe rise of mega cities", use_container_width=True):
-    st.switch_page("pages/2_🏙️_Urbanization_&_Population.py")
+    st.switch_page("pages/2_Urbanization_and_Population.py")
 if col3.button("🌱 Environment\nThe cost of growth", use_container_width=True):
-    st.switch_page("pages/3_🌿_Environment_&_Energy.py")
+    st.switch_page("pages/3_Environment_and_Energy.py")
 if col4.button("💡 Innovation & Society\nFrom manufacturing to mind", use_container_width=True):
-    st.switch_page("pages/5_🎓_Innovation_&_Society.py")
+    st.switch_page("pages/4_Innovation_and_Society.py")
 
-
-# Footer
 st.markdown("<div class='section'></div>", unsafe_allow_html=True)
 st.markdown(
     """
