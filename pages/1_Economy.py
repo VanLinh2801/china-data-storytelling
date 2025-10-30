@@ -291,6 +291,10 @@ with col1:
         color="Decade",
         color_discrete_map={"2000s": "#4e79a7", "2010s": "#d33f49"},
         hover_data={"Year": True, "Invest": ":.1f", "GDP_growth_pct": ":.1f"},
+        labels={
+            "Invest": "Invest (%GDP)",
+            "GDP_growth_pct": "GDP Growth (%)"
+        },
         trendline="ols",
     )
     fig3.update_layout(title=dict(text="Investment (% of GDP) vs GDP Growth (%)", y=0.95), margin=dict(t=100, b=50, l=50, r=30), height=460, legend_title="", legend=dict(orientation="h", yanchor="top", y=1.12, xanchor="left", x=0.0))
@@ -302,7 +306,7 @@ with col2:
     infl = infl_cpi.merge(infl_defl, on="Year", how="inner")
     infl = decade_filter(infl, decade_choice)
     fig4 = go.Figure()
-    fig4.add_trace(go.Scatter(x=infl["Year"], y=infl["CPI_infl_pct"], name="CPI (%)", mode="lines+markers", line=dict(color="#d33f49")))
+    fig4.add_trace(go.Scatter(x=infl["Year"], y=infl["CPI_infl_pct"], name="CPI Inflation (%)", mode="lines+markers", line=dict(color="#d33f49")))
     fig4.add_trace(go.Scatter(x=infl["Year"], y=infl["GDP_deflator_pct"], name="GDP Deflator (%)", mode="lines+markers", line=dict(color="#6c757d")))
     fig4.update_layout(title=dict(text="Inflation: CPI vs GDP Deflator", y=0.95), xaxis_title="Year", yaxis_title="Percent (%)", margin=dict(t=100, b=50, l=50, r=30), height=460, legend=dict(orientation="h", yanchor="top", y=1.12, xanchor="left", x=0.0))
     fig4.update_xaxes(automargin=True)
@@ -451,7 +455,7 @@ with row_b2:
 
 st.subheader("China Global Trade Network")
 try:
-    trade_regions_path = PROJECT_ROOT / "data/china_trade_regions.csv"
+    trade_regions_path = PROJECT_ROOT / "data" / "china_trade_regions.csv"
     if trade_regions_path.exists():
         tri = pd.read_csv(trade_regions_path)
         expected_cols = {"Year", "Region", "Exports_USD", "Imports_USD"}

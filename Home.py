@@ -18,6 +18,11 @@ st.markdown(
     <style>
       :root { --red:#d33f49; --gray:#6c757d; --bg:#f8f9fa; --ink:#222; --card:#ffffff; }
       html, body, .main { background: var(--bg); font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif; }
+      /* Align sidebar typography with other pages */
+      [data-testid="stSidebar"], [data-testid="stSidebar"] * {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif !important;
+        font-size: 0.95rem;
+      }
       h1,h2,h3 { color: var(--ink); letter-spacing: -0.3px; }
       .hero { position:relative; padding: 7rem 6rem; border-radius: 24px; background: radial-gradient(80% 120% at 10% 10%, #fff, #f6f6f7); overflow:hidden; }
       .hero::after { content:""; position:absolute; inset:0; background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/People%27s_Republic_of_China_%28orthographic_projection%29.svg/512px-People%27s_Republic_of_China_%28orthographic_projection%29.svg.png') center/contain no-repeat; opacity:0.06; filter: grayscale(100%); animation: fadeIn 2s ease forwards; }
